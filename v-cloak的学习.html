@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+<body>
+    <div id="app">
+        <!--使用v-cloak 能够解决 插值表达式闪烁的问题-->
+        <p v-cloak>{{msg}}</p>
+        <h4 v-text="msg"></h4>
+        <!--默认v-text是没有闪烁问题的 ，但是v-text会覆盖标签中的内容 ,但是插值表达式
+            只会替换自己的这个占位符，不会吧整个元素覆盖-->
+        <div v-html="msg2"></div>
+        <!--html语句需要放在v-html中才能解析-->
+    </div>
+    
+    <script>
+        var vm = new Vue ({
+            el:'#app',
+            data:{
+                msg:'123',
+                msg2:"<h1>我是一个h1标签<h1>"
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>跑马灯</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+<body>
+
+    <!---->
+    <div id="app">
+        <input type="button" value="浪起来!" @click="lang" >
+        <input type="button" value="低调" @click="stop">
+
+        <h4>{{ msg }}</h4>
+
+    </div>
+
+    <script>
+        /*在vm实例中如果想要获取data上的数据或者想要调用methods中
+        的方法必须使用this.数据属性名或者this.方法名来进行访问
+        */
+        var vm =new Vue ({
+            el:'#app',
+            /*Vue会自动监听自身data的改变，一旦data改变会自动更新 这样我们就不需要
+            关心数据如何渲染，而知用关心数据的改变*/
+            data:{
+                msg:'猥琐发育,别浪~~!',
+                intervalId:null  //在data上定义定时器id  
+                //如果不在data上定义，那么该方法在其它方法上无法访问到
+            },
+            methods:{
+                lang(){
+
+
+                    if (this.intervalId!=null) return;
+                    // console.log(this.msg)
+                    /* 箭头函数将内部this和外部this指向相同*/
+                    this.intervalId=setInterval( () => {
+                        //获取第一个字符
+                    var start = this.msg.substring(0,1)
+                    //获取到后面所有的字符
+                    var end = this.msg.substring(1)
+                    //重新拼接得到的新字符串，并赋值给this.msg
+                    this.msg = end + start
+
+                    },150)
+                },
+                stop() {
+                        clearInterval(this.intervalId)
+                        //每当清除了定时器之后，需要将this.intervalId 赋值为null
+                        this.intervalId=null
+                    }
+            }
+        })
+    </script>
+</body>
+</html>
