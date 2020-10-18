@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>v-if和v-show的使用</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+</head>
+<body>
+    <div id="app" >
+
+        <!-- <input type="button"value="控制" @click="toggle"> -->
+        <input type="button"value="控制" @click="flag=!flag">
+
+
+        <h3 v-if="flag">这是用v-if控制的元素</h3>
+        <h3 v-show="">这是用v-show控制的元素</h3>
+
+    </div>
+    
+
+
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                flag:true,
+            },
+            methods:{
+                toggle(){
+                    this.flag = !this.flag
+                }
+            }
+        })
+    </script>
+</body>
+</html>
