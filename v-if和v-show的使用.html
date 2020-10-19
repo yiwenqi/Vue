@@ -13,7 +13,14 @@
         <!-- <input type="button"value="控制" @click="toggle"> -->
         <input type="button"value="控制" @click="flag=!flag">
 
+        <!--v-if 的特点:每次都会重新删除或者创建元素-->
+        <!--v-show 的特点: 每次都不会重新进行DOM的删除和创建操作，只是切换了元素的 display:none 样式-->
 
+        <!-- v-if 有较高的切换性能消耗-->
+        <!--v-show 有较高的初始渲染消耗-->
+
+        <!-- 如果元素涉及到频繁的切换 ，最好不要使用v-if 而推荐使用v-show-->
+        <!--如果元素可能永远也不会被显示出来被用户，则推荐使用v-if -->
         <h3 v-if="flag">这是用v-if控制的元素</h3>
         <h3 v-show="">这是用v-show控制的元素</h3>
 

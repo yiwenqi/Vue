@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <title>过滤器的模拟</title>
+</head>
+<body>
+    <div id="app" >
+        <!-- 过滤器可以多次调用 比如疯狂后面还可以跟过滤器 -->
+        <p>{{ msg | msgFormat('疯狂')}}</p>
+    </div>
+
+
+
+    <script>
+        //定义一个全局的过滤器 ，名字叫做msgFormat
+        Vue.filter('msgFormat' ,function(msg, arg){
+            //字符串的 replace 方法，第一个参数 除了可以接收一个字符串还可以是一个正则
+           return msg.replace(/单纯/g , arg)
+        })
+
+
+        new Vue ({
+            el:'#app',
+            data:{
+                msg:'单纯的我 ,  最单纯的男人, 如今也不再单纯了'
+            },
+            methods:{}
+        })
+    </script>
+
+</body>
+</html>
