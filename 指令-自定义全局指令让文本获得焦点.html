@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>指令-通过自定义全局指令让文本获得焦点</title>
+</head>
+<body>
+    <div id="app">
+        
+        <div class="panel panel-primary">
+              <div class="panel-heading">
+                    <h3 class="panel-title">添加品牌</h3>
+              </div>
+              <div class="panel-body form-inline">
+                  <label for="ID">
+                      Id:
+                      <input type="text" name="" id="" v-model="id">
+                  </label>
+
+                  <label for="Name"> 
+                      Name:
+                        <input type="text" v-model="name" @keyup.enter="add">
+                    </label>
+                    
+                  
+                    <input type="button" value="添加" @click="add" class="btn btn-primary" name="" id="">
+                    
+
+                    <label for="">
+                        搜索关键字:
+                        <!--注意: 自定义指令 前面都必须加 v- 以下面自定义指令v-focus为例  -->
+                        <input type="text"  class="form-control" v-model="keywords" name="" id="search" v-focus v-color="'blue'" >
+                    </label>
+              </div>
+        </div>
+        
+
+
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Ctime</th>
+                    <th>Operation</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="item in search(keywords)" :key="item.id">
+                    <td>{{item.id}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.ctime}}</td>
+                    <td>
+                        <a href="" @click.prevent="del(item.id)">删除</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // //原生js使用这种方法，但Vue不推荐直接对dom元素进行操作
+        // document.getElementById('serch').focus
+        
+
+        //自定义指令  使用  Vue.directive() 定义 全局指令
+        //参数1 是指令的名称  注意，在定义的时候，指令的名称前面不需要加v— 前缀，
+        //但是在调用的时候必须加 V- 前缀
+        //参数2 是一个对象  这个对象身上 ，有一些指令钩子函数，这些函数可以在特点的阶段，执行相关操作
+        //指令定义提供 bind inserted update componentUpdate  unbind 这些钩子函数
+        Vue.directive('focus',{
+            bind:function(el){//没当指令绑定到元素上的时候，会立即执行这个bind函数 ，只执行一次
+                //在每个函数中，第一个参数永远是 el，表示 被绑定了指令的那个元素  ,el是一个原生的JS对象
+                //在元素 刚绑定了指令的时候 ，还没有插入到DOM中去 ，这个时候调用focus 方法没有作用
+                // el.focus()
+            },
+            inserted:function(el){ //inserted 表示元素 插入到DOM 中的时候 ，会执行inserted 函数
+                //应插入此处
+                el.focus()
+            },
+            updated:function(){ //当VNode更新时 ，会hi下update ，可能会触发多次
+
+            }
+        })
+
+        Vue.directive('color',{
+            //通过binding来获取 传递的值
+            bind:function(el,binding){
+                //  .name 获取指令名称 .value 获取指令绑定的值 是""内的东西 .expression 获取的是包含 "" 在内的表达式
+               el.style.color = binding.value
+            }
+           
+        })
+
+
+        Vue.config.keyCodes.f2=113
+
+        new Vue({
+            el:'#app',
+            data:{
+                name:'',
+                id:'',
+                keywords:'',
+                newList:'',
+                list:[
+                    { id:1, name:'奔驰', ctime: new Date() },
+                    { id:2, name:'宝马', ctime: new Date()},
+                    { id:3, name:'法拉利', ctime: new Date()},
+                    { id:4, name:'长安', ctime: new Date()}
+                ]
+            },
+            methods:{
+
+                add(){
+                    var car = { id: this.id, name:this.name , ctime: new Date()}
+
+                     this.list.push(car)
+                },
+
+                del(id){
+                   
+                    var index = this.list.findIndex(item => {
+                        if(item.id == id ){
+                            return true;
+                        }
+                    })
+
+                    this.list.splice(index,1);
+                },
+
+                search(keywords){
+                    
+                    return this.list.filter(item => {
+                   
+                        if(item.name.includes(keywords)){
+                            return item
+                        }
+                    }) 
+                }
+            },
+            
+
+            //自定义私有指令
+            directives : {
+                'fontweight' : {
+                    bind: function(el,binding){
+                        el.style.fontweight = binding.value
+                    }
+                },
+                'fontsize' : function(el,binding){ // 注意 : 这个function 等同于 把代码写道了 bind 和 update 中去
+                    el.style.fontsize = parseInt(binding.value)   +'px'
+                }
+            }
+        })
+    </script>
+</body>
+</html>

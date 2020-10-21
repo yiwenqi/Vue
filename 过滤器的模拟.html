@@ -13,6 +13,8 @@
         <p>{{ msg | msgFormat('疯狂')}}</p>
     </div>
 
+    <div id="app2"></div>
+
 
 
     <script>
@@ -28,7 +30,14 @@
             data:{
                 msg:'单纯的我 ,  最单纯的男人, 如今也不再单纯了'
             },
-            methods:{}
+            methods:{},
+            //也可以在此处定义一个私有过滤器，过滤器调用的时候采用的就近原则，如果与全局过滤器重名了优先调用私有过滤器
+            filters:{
+                dateFormat:function(){
+                    //里面则是需要处理的操作
+                }
+            }
+
         })
     </script>
 
