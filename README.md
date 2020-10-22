@@ -143,5 +143,177 @@ vue入门学习
                     
                     
           综合案例：品牌案例
+          
+    第三天学习
+        1.全局过滤器的使用
+        
+          <!-- 过滤器可以多次调用 比如疯狂后面还可以跟过滤器 -->
+        <p>{{ msg | msgFormat('疯狂')}}</p>
+        
+        
+             //定义一个全局的过滤器 ，名字叫做msgFormat
+        Vue.filter('msgFormat' ,function(msg, arg){
+            //字符串的 replace 方法，第一个参数 除了可以接收一个字符串还可以是一个正则
+           return msg.replace(/单纯/g , arg)
+        })
+        
+          new Vue ({
+            el:'#app',
+            data:{
+                msg:'单纯的我 ,  最单纯的男人, 如今也不再单纯了'
+            },
+            methods:{},
+            //也可以在此处定义一个私有过滤器，过滤器调用的时候采用的就近原则，如果与全局过滤器重名了优先调用私有过滤器
+            filters:{
+                dateFormat:function(){
+                    //里面则是需要处理的操作
+                }
+            }
+
+        })
+        
+        2.事件修饰符
+            <!-- .stop 阻止冒泡   事件修饰符的使用方法-->
+            <!-- <div class="inner" @click="divHandler">
+                <input  type="button" value="戳他" @click.stop="btnHandler">
+                </div>
+             -->
+                <!-- .stop可以阻止冒泡的 -->
+                <!-- 如果不阻止，在点击button时，会触发div的点击事件，这样的触发叫做冒泡 -->
+
+                <!-- 使用 .prevent 阻止默认行为-->
+                <!-- <a href="http://www.baidu.com" @click.prevent="linkClick">有问题，先百度</a> -->
+
+                 <!--使用 .capture 实现捕获触发机制（由外向内触发的机制）-->
+            <!-- <div class="inner" @click.capture="divHandler">
+                    <input  type="button" value="戳他" @click.stop="btnHandler">
+                  </div>
+             -->
+
+             <!--使用.self 实现只有点击当前元素的时候才会触发事件处理函数-->
+             <!-- <div class="inner" @click.self="divHandler">
+                <input  type="button" value="戳他" @click.stop="btnHandler">
+              </div> -->
+
+
+              <!--使用 .once 只触发一次处理函数 -->
+              <!-- <a href="http://www.baidu.com" @click.prevent.once="linkClick">有问题，先百度</a> -->
+
+              <!--演示: .stop 和 .self 的区别-->
+                <!-- <div class="outer" @click="div2Hand">
+                    <div class="inner" @click="divHandler">
+                        <input  type="button" value="戳他" @click.stop="btnHandler">
+                    </div>
+                </div> -->
+                <!-- .self只会阻止自己身上冒泡行为的触发，并不会真正阻止冒泡行为的触发-->
+                <div class="outer" @click="div2Hand">
+                    <div class="inner" @click.self="divHandler">
+                        <input  type="button" value="戳他" @click.stop="btnHandler">
+                    </div>
+                </div>
+        
+            3.自定义指令
+                <label for="">
+                        搜索关键字:
+                        <!--注意: 自定义指令 前面都必须加 v- 以下面自定义指令v-focus为例  -->
+                        <input type="text"  class="form-control" v-model="keywords" name="" id="search" v-focus v-color="'blue'" >
+                    </label>
+                    
+                    <script>
+                        // //原生js使用这种方法，但Vue不推荐直接对dom元素进行操作
+                        // document.getElementById('serch').focus
+
+
+                        //自定义指令  使用  Vue.directive() 定义 全局指令
+                        //参数1 是指令的名称  注意，在定义的时候，指令的名称前面不需要加v— 前缀，
+                        //但是在调用的时候必须加 V- 前缀
+                        //参数2 是一个对象  这个对象身上 ，有一些指令钩子函数，这些函数可以在特点的阶段，执行相关操作
+                        //指令定义提供 bind inserted update componentUpdate  unbind 这些钩子函数
+                        Vue.directive('focus',{
+                            bind:function(el){//没当指令绑定到元素上的时候，会立即执行这个bind函数 ，只执行一次
+                                //在每个函数中，第一个参数永远是 el，表示 被绑定了指令的那个元素  ,el是一个原生的JS对象
+                                //在元素 刚绑定了指令的时候 ，还没有插入到DOM中去 ，这个时候调用focus 方法没有作用
+                                // el.focus()
+                            },
+                            inserted:function(el){ //inserted 表示元素 插入到DOM 中的时候 ，会执行inserted 函数
+                                //应插入此处
+                                el.focus()
+                            },
+                            updated:function(){ //当VNode更新时 ，会hi下update ，可能会触发多次
+
+                            }
+                        })
+
+                        Vue.directive('color',{
+                            //通过binding来获取 传递的值
+                            bind:function(el,binding){
+                                //  .name 获取指令名称 .value 获取指令绑定的值 是""内的东西 .expression 获取的是包含 "" 在内的表达式
+                               el.style.color = binding.value
+                            }
+
+                        })
+
+
+                        Vue.config.keyCodes.f2=113
+
+                        new Vue({
+                            el:'#app',
+                            data:{
+                                name:'',
+                                id:'',
+                                keywords:'',
+                                newList:'',
+                                list:[
+                                    { id:1, name:'奔驰', ctime: new Date() },
+                                    { id:2, name:'宝马', ctime: new Date()},
+                                    { id:3, name:'法拉利', ctime: new Date()},
+                                    { id:4, name:'长安', ctime: new Date()}
+                                ]
+                            },
+                            methods:{
+
+                                add(){
+                                    var car = { id: this.id, name:this.name , ctime: new Date()}
+
+                                     this.list.push(car)
+                                },
+
+                                del(id){
+
+                                    var index = this.list.findIndex(item => {
+                                        if(item.id == id ){
+                                            return true;
+                                        }
+                                    })
+
+                                    this.list.splice(index,1);
+                                },
+
+                                search(keywords){
+
+                                    return this.list.filter(item => {
+
+                                        if(item.name.includes(keywords)){
+                                            return item
+                                        }
+                                    }) 
+                                }
+                            },
+
+
+                            //自定义私有指令
+                            directives : {
+                                'fontweight' : {
+                                    bind: function(el,binding){
+                                        el.style.fontweight = binding.value
+                                    }
+                                },
+                                'fontsize' : function(el,binding){ // 注意 : 这个function 等同于 把代码写道了 bind 和 update 中去
+                                    el.style.fontsize = parseInt(binding.value)   +'px'
+                                }
+                            }
+                        })
+                    </script>
+        
 
       
