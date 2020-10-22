@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>声明周期的演示</title>
+</head>
+<body>
+    <div id="app"></div>
+
+
+    <script>
+        var vm = new Vue({
+            el:'#app',
+            data:{},
+            methods:{},
+            beforCreate(){
+                //这是我们遇到的第一个生命周期函数，表示实例完全被创建出来之前，会执行它
+                //注意: 在beforeCreate 生命周期函数执行的时候 ，data 和 methods 中的数据还没有初始化
+
+
+            },
+            create(){
+                //这是我们遇到的第二个生命周期函数
+                //在create 中 data 和 methods 都已经被初始化好了
+                //如果想要调用data和methods中的方法最早只能在create中
+            },
+            beforeMount(){
+                //这是我们遇到的第一个生命周期函数，表示 模板已经在内存中编辑完成 但还没有渲染挂载到页面上
+                //在beforeMount执行的时候 ，页面中的元素，还没有真正的替换过来  只是之前写的一些模板字符串如：{{msg}} 依旧没有替换过来
+            },
+
+            /*如果要通过某些插件操作页面上的DOM节点，最早要在mount中执行  此时组件已经
+            脱离了创建阶段，进入运行阶段，运行阶段有beforUpdate 和update 两个函数
+            这两个函数会根据DOM元素的数据改变有选择性的触发 0次 或  多次*/
+            mount(){
+                //这是遇到的第四个生命周期函数，表示内存中的模板，已经真实的挂载到页面中
+                //此时 {{msg}} 已经被替换
+                /*mount 是实例创建期间的最后一个生命周期，当执行完be mount 就表示 实例已经
+                被完全创建好了，此时如果没有其他的操作的话，这个实例就静静的放在内存中*/
+            },
+
+            //接下来就是运行中的两个事件
+            beforeUpdate(){
+                //这个时候，表示 我们的界面还没有被更新  【但是数据被更新了】
+                /*得出结论: 当执行 befordate 时页面中的数据依然是以前的数据 ， 
+                    但是 vue 中的 data{} 数据已经更新*/
+            },
+            
+            updated(){
+                //此时界面的数据也被更新了
+            }
+
+        })
+
+    </script>
+</body>
+</html>
