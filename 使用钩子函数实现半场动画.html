@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用钩子函数实现半场动画</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <style>
+        .ball{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="快到碗里来" @click="flag=!flag">
+        <!--以下为进入半场的钩子函数-->
+        <transition 
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:after-enter="afterEnter">
+             <div class="ball" v-show="flag"></div>
+        </transition>
+        <!--以下为离开半场的钩子函数
+            v-on:before-leave="beforeLeave"
+            v-on:leave="leave"
+            v-on:after-leave="afterLeave"
+            v-on:leave-cancelled="leaveCancelled"
+        -->
+       
+       
+    </div>
+
+
+    <script>
+        new Vue ({
+            
+            el:'#app',
+            data:{
+                flag:false
+            },
+            methods:{
+                //注意 : 动画钩子函数的第一个参数: el , 表示 要执行动画的那个DOM元素，是个原生的 JS DOM对象
+                //相当于document.getElementById（''）
+                beforeEnter(el){
+                    /*beforEnter 表示动画入场之前，此时，动画尚未开始，可以在 beforEnter 中，设置
+                    元素开始动画之前的起始样式*/
+                    el.style.transform="translate(0,0)"
+
+                },
+                enter(el , done) {
+                    //这句话没有实际作用，但是不写，出不来动画效果
+                    //可以认为是强制刷新动画，必须要写的 但不一定时 Width 
+                    el.offsetWidth
+                    //表示动画开始之后的样式，这里可以设置小球完成动画之后的，结束状态
+                    el.style.transform="translate(150px,450px)"
+                    el.style.transition='all 1s ease'
+
+                    //这里的 done 其实就是afterEnter 这个函数 ，也就是说；done 是afterEnter 函数的引用
+                    done()
+                    //在enter 和leave 中是必须要有的
+                },
+                afterEnter(el){
+                    //afterEnter 表示动画 开始之后的样式 ， 这里，可以设置小球完成动画之后的，结束状态
+                    this.flag = !this.flag 
+
+                },
+             
+            }
+        })
+    </script>
+</body>
+</html>
