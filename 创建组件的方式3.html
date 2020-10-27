@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>创建组件的方式3</title>
+</head>
+<body>
+    <div id="app">
+        <mycom3></mycom3>
+        <login></login>
+    </div>
+    <!-- 如果要使用组件， 直接把组件的名称 ，以 HTML 标签的形式，引入到页面中，即可   -->
+    <template id="tmp1">
+        <div>
+            <h1>
+                我是组件中的h1
+            </h1>
+        </div>
+    </template>
+
+    <template id=tmp2>
+            <div>
+                <h1>
+                    我是私有组件
+                </h1>
+            </div>
+        
+    </template>
+
+<script>
+
+    Vue.component('mycom3',{
+        template:'#tmp1'
+    })
+
+
+      var vm = new Vue({
+        el:'#app',
+        data:{},
+        methods:{},
+        // 定义一个私有组件
+        components:{
+            login:{
+                template: '#tmp2'
+            }
+        }
+    })
+
+    
+</script>
+  
+</body>
+</html>
