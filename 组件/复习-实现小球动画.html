@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用钩子函数实现半场动画</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <style>
+        .ball{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="快到碗里来" @click="flag=!flag">
+        <!--以下为进入半场的钩子函数-->
+        <transition 
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:after-enter="afterEnter">
+             <div class="ball" v-show="flag"></div>
+        </transition>
+        <!--以下为离开半场的钩子函数
+            v-on:before-leave="beforeLeave"
+            v-on:leave="leave"
+            v-on:after-leave="afterLeave"
+            v-on:leave-cancelled="leaveCancelled"
+        -->
+       
+       
+    </div>
+
+
+    <script>
+        new Vue ({
+            
+            el:'#app',
+            data:{
+                flag:false
+            },
+            methods:{
+              
+                beforeEnter(el){
+                   
+                    el.style.transform="translate(0,0)"
+
+                },
+                enter(el , done) {
+                    
+                    el.offsetWidth
+                   
+                    el.style.transform="translate(150px,450px)"
+                    el.style.transition='all 1s ease'
+                    done()
+                    
+                },
+                afterEnter(el){
+                   
+                    this.flag = !this.flag 
+
+                },
+             
+            }
+        })
+    </script>
+</body>
+</html>
