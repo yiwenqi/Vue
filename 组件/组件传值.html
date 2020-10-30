@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>父组件向子组件传值和data与props的区别</title>
+
+</head>
+<body>
+    <div id="app">
+        <!-- 父组件， 可以在引用子组件的时候 ， 通过 属性绑定(v-bind:) 的形式， 把需要传递给子组件的数据，
+        以属性绑定的形式，传递到子组件内部，供子组件使用  -->
+        <com1 v-bind:parentmsg="msg"></com1>
+    </div>
+
+
+    <script>
+       var vm = new Vue({
+            el:'#app',
+            data: {
+                 msg: '123-这是父组件中的数据'
+            },
+            methods:{},
+            components: {
+                com1: {
+                    //data中的数据都是可读可写的
+                    data(){
+                        //注意: 子组件中的 data 数据，并不是 通过父组件传递过来的，而是子组件自身私有的，比如: 子组件通过 Ajax ，请求回来
+                        // 的数据，都可以放在 data 中   
+                        return {
+
+                            title:'123',
+                            content:'qqq'
+                        }
+                    },
+                    template: '<h3>这是子组件----{{parentmsg}}</h3>',
+                    props:['parentmsg'],  //把父组件传递过来的 parentmsg 属性，先在 props 数组中
+                    // 定义一下，这样，才能使用这个数据（props中的数据都是只读的，是无法重新赋值的）
+                }
+            }
+        })
+    </script>
+    
+</body>
+</html>

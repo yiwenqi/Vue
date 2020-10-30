@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>子组件通过事件调用向父组件传值</title>
+</head>
+<body>
+    <div id="app">
+        <!-- 父组件向子组件传递方法，使用的是v-on事件传递机制，当我们自定义一个事件
+        可以使用v-on来进行父组件方法调用 -->
+       <com2 v-on:func="show"></com2>
+    </div>
+
+    <template id="tmp1">
+        <div>
+            <h1>
+                这是一个子组件
+                <input type="button" name="" value="这是子组件中的按钮 -点击它触发父组件的方法" 
+                @click="myclick">
+            </h1>
+        </div>
+    </template>
+
+    <script>
+        var com2 = {
+            template:'#tmp1',
+            data(){
+                return{
+                    sonmsg:{name : '小头儿子' , age :6}
+                }
+            },
+            methods:{
+                myclick(){
+                    //当点击组件的按钮时候，如何拿到父母传递 func 方法 ， 并调用这个方法》》
+                    //emit 英文原意: 触发， 调用，发射的意思
+                    this.$emit('func',this.sonmsg)
+                }
+            }
+        }
+
+
+       var vm = new Vue({
+            el:'#app',
+            data: {
+                 msg: '123-这是父组件中的数据',
+                 datamsgFormSon:null
+            },
+            methods:{
+                show(data){
+                    // console.log("调用了父组件身上的 show 方法 ---" + data)
+                    // console.log(data)
+                    this.datamsgFormSon = data
+                    //子组件向父组件传值 
+                    //本质上是父组件向子组件传递一个方法，然后子组件调用方法时候传递一个参数进去
+                    // 然后父组件就可以拿到这个参数了
+                }
+            },
+            components: {
+                com2
+                }
+            
+        })
+    </script>
+    
+</body>
+</html>
