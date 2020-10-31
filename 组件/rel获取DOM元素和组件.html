@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <title>rel获取DOM元素和组件引用</title>
+</head>
+<body>
+    <div id="app">
+        <input type="button" value="获取元素" @click="getElement">
+
+        <h3 id="myh3" ref="myh3" >123456</h3>
+
+        <login ref="mylogin"></login>
+    </div>
+
+    
+    <script>
+        var login = {
+            template :'<h2>登录组件</h',
+            data(){
+                return{
+                    msg:'son msg'
+                }
+            },
+            methods:{
+                show(){
+                    console.log('调用了子组件的方法')
+                }
+            }
+        }
+        new Vue({
+            el:'#app',
+            data:{},
+            methods:{
+                getElement(){
+
+                    //使用原生的 document 无法获取DOM元素 ， 需要使用ref
+
+                    //ref  可以获取DOM元素和组件
+                    console.log(this.$refs.myh3.innerText)
+
+                    //ref  也可以引用组件的方法和data
+                    console.log(this.$refs.mylogin.msg)
+                }
+            },
+            components:{
+                login
+            }
+        })
+    </script>
+    
+</body>
+</html>
