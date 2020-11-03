@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./lib/vue-router.js"></script>
+    <title>设置选中路由高亮的两种方式</title>
+</head>
+<style>
+    .router-link-active{
+        /* 在vue 中会自动给 router-link加上一个 router-link-active的类 */
+        /* 我们也可以在router构造函数里面修改默认值 */
+        color: red;
+        font-weight:800;
+        font-style: italic;
+        font-size: 80px;
+        text-decoration: underline;
+        
+    }
+
+    /* 将默认值改为了myactive */
+    .myactive{
+        color: green;
+        font-weight:800;
+        font-style: italic;
+        font-size: 80px;
+        text-decoration: underline;
+    }
+</style>
+<body>
+    <div id="app">
+
+       
+        <router-link to="/login" tag="span">登录</router-link>
+        <router-link to="/register" tag="span">注册</router-link>
+      
+        <router-view></router-view>
+
+    </div>
+
+    <script>
+
+
+        //组件的模板对象
+        var login = {
+            template:'<h3>我是登录组件</h3>',
+        }
+
+        //组件的模板对象
+        var register = {
+            template:'<h3>我是注册组件</h3>',
+        }
+
+
+       
+        var routerObj = new VueRouter({
+
+            routes:[  //路由匹配规则
+                {path:'/',redirect:'/login'}, //这里的重定向与服务器端的完全不一样，这里只是修改一下url的hashValue
+                {path:'/login',component:login},
+                {path:'/register',component:register}
+            ],
+            // 更改默认值router-link-active 为myactive
+            linkActiveClass:'myactive',
+        })
+
+
+
+        new Vue({
+            el:'#app',
+            data:{},
+            methods:{},
+            router:routerObj  //将路由规则对象 ，注册到vm 实例上 ，用来监听 URL 地址变化， 然后展示对应的组件
+        });
+    </script>
+</body>
+</html>

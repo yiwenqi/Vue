@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./lib/vue-router.js"></script>
+    <title>router-link的使用</title>
+</head>
+<body>
+    <div id="app">
+
+        <!-- router-link 默认渲染一个 a 标签  -->
+       <router-link to="/login">登录</router-link>
+       <!-- 也可以将其渲染为 span 等标签 -->
+       <router-link to="/register" tag="span">注册</router-link>
+       <!-- 但无论渲染为什么标签 ，其内部是依然可以点击的 -->
+
+
+        <!-- 这是vue-router 提供的元素 ，专门用来当作占位符的，将来，路由规则，匹配的组件，就会展示到router-view中去 -->
+        <router-view></router-view>
+
+    </div>
+
+    <script>
+
+
+        //组件的模板对象
+        var login = {
+            template:'<h3>我是登录组件</h3>',
+        }
+
+        //组件的模板对象
+        var register = {
+            template:'<h3>我是注册组件</h3>',
+        }
+
+
+       
+        var routerObj = new VueRouter({
+
+            routes:[  //路由匹配规则
+                {path:'/login',component:login},
+                {path:'/register',component:register}
+            ]
+        })
+
+
+
+        new Vue({
+            el:'#app',
+            data:{},
+            methods:{},
+            router:routerObj  //将路由规则对象 ，注册到vm 实例上 ，用来监听 URL 地址变化， 然后展示对应的组件
+        });
+    </script>
+</body>
+</html>
