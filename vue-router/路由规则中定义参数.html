@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./lib/vue-router.js"></script>
+    <title>路由规则中定义参数</title> 
+</head>
+<body>
+    <div id="app">
+
+       
+        <router-link to="/login?id=10&name=zs">登录</router-link>
+        <router-link to="/register" >注册</router-link>
+        <transition mode="out-in">
+        <router-view></router-view>
+        </transition>
+    </div>
+
+    <script>
+
+
+        var login = {
+            template:'<h3>我是登录组件 --- {{  this.$route.query.id }} ---- {{  this.$route.query.name }}</h3>',
+            created(){
+                console.log(this.$route.query.id)
+            }
+        }
+
+        var register = {
+            template:'<h3>我是注册组件</h3>',
+        }
+
+
+       
+        var router = new VueRouter({
+
+            routes:[  
+                {path:'/',redirect:'/login'}, 
+                {path:'/login',component:login},
+                {path:'/register',component:register},
+            ],
+            linkActiveClass:'myactive',
+        })
+
+
+
+        new Vue({
+            el:'#app',
+            data:{},
+            methods:{},
+            // router:router,
+            router
+        });
+    </script>
+</body>
+</html>

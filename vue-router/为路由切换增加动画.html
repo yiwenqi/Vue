@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="./lib/vue-router.js"></script>
+    <title>为路由切换增加动画</title>
+    <style>
+          .router-link-active{
+        /* 在vue 中会自动给 router-link加上一个 router-link-active的类 */
+        /* 我们也可以在router构造函数里面修改默认值 */
+        color: red;
+        font-weight:800;
+        font-style: italic;
+        font-size: 80px;
+        text-decoration: underline;
+        
+        }
+
+        /* 将默认值改为了myactive */
+        .myactive{
+            color: green;
+            font-weight:800;
+            font-style: italic;
+            font-size: 80px;
+            text-decoration: underline;
+        }
+
+        .v-enter,
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(140px);
+        }
+
+        .v-enter-active,
+        .v-leave-active{
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+       
+        <router-link to="/login">登录</router-link>
+        <router-link to="/register" >注册</router-link>
+        <transition mode="out-in">
+           <!-- 为 router-view 增加transition过渡动画  -->
+        <router-view></router-view>
+        </transition>
+    </div>
+
+    <script>
+
+
+        //组件的模板对象
+        var login = {
+            template:'<h3>我是登录组件</h3>',
+        }
+
+        //组件的模板对象
+        var register = {
+            template:'<h3>我是注册组件</h3>',
+        }
+
+
+       
+        var routerObj = new VueRouter({
+
+            routes:[  
+                {path:'/',redirect:'/login'}, 
+                {path:'/login',component:login},
+                {path:'/register',component:register},
+            ],
+            linkActiveClass:'myactive',
+        })
+
+
+
+        new Vue({
+            el:'#app',
+            data:{},
+            methods:{},
+            router:routerObj,
+        });
+    </script>
+</body>
+</html>
